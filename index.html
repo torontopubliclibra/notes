@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note Taken</title>
+    <meta name="description" content="Your little local notes app.">
+    <meta name="keywords" content="note, notes, note-taking, privacy, local storage, browser, app, productivity, writing">
+    <meta name="author" content="Dana Teagle">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Note Taken">
+    <meta property="og:description" content="Your little local notes app.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://notes.danateagle.com/">
+    <meta property="og:image" content="">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Note Taken">
+    <meta name="twitter:description" content="Your little local notes app.">
+    <meta name="twitter:image" content="">
+    <link rel="canonical" href="https://notes.danateagle.com/">
+    <link rel="stylesheet" href="styles.css">
+    preload fonts
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Homemade+Apple&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="/fonts/source_code_pro/SourceCodePro-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+</head>
+<body>
+    <div class="note-title-main"><h1>Note Taken</h1></div>
+    <div class="tabbed-container">
+        <div class="tabs" id="tabs">
+        </div>
+        <div class="tab-content">
+            <button class="note-close-btn" id="noteCloseBtn" title="Delete note">&times;</button>
+            <textarea class="large-textarea" id="tabTextarea" placeholder="Start typing here..."></textarea>
+            <div class="note-info-bar" id="noteInfoBar">
+                <span id="lastUpdated">Last updated: never</span> | 
+                <span id="charCount">0 characters</span>
+            </div>
+            <div class="note-swatches" id="noteSwatches">
+                <button class="swatch swatch-blue" data-color="blue" title="Blue"></button>
+                <button class="swatch swatch-red" data-color="red" title="Red"></button>
+                <button class="swatch swatch-green" data-color="green" title="Green"></button>
+                <button class="swatch swatch-orange" data-color="orange" title="Orange"></button>
+                <button class="swatch swatch-yellow" data-color="yellow" title="Yellow"></button>
+                <button class="swatch swatch-purple" data-color="purple" title="Purple"></button>    
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>
+            Website designed by <a href="https://danateagle.com" title="Dana Teagle's website" target="_blank" rel="norefferer">Dana Teagle</a>. Your notes are stored locally in your browser and never leave your device.</span>
+        </p>
+    </footer>
+    <script src="scripts.js"></script>
