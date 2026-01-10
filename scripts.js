@@ -137,17 +137,19 @@ if (tabsContainer) {
 if (noteCloseBtn) {
     noteCloseBtn.addEventListener('click', function() {
         if (tabContents.length === 1) {
-            // If the only note is empty and not blue, reset color to blue too
-            textarea.value = "";
-            tabContents[0].text = "";
-            tabContents[0].lastUpdated = null;
-            if (tabContents[0].color !== DEFAULT_COLOR) {
-                tabContents[0].color = DEFAULT_COLOR;
-                setNoteColor(DEFAULT_COLOR);
+            if (confirm('Are you sure you want to delete this note?')) {
+                // If the only note is empty and not blue, reset color to blue too
+                textarea.value = "";
+                tabContents[0].text = "";
+                tabContents[0].lastUpdated = null;
+                if (tabContents[0].color !== DEFAULT_COLOR) {
+                    tabContents[0].color = DEFAULT_COLOR;
+                    setNoteColor(DEFAULT_COLOR);
+                }
+                // Force tab label to 'untitled' by re-rendering tabs
+                renderTabs();
+                saveNotes();
             }
-            // Force tab label to 'untitled' by re-rendering tabs
-            renderTabs();
-            saveNotes();
             return;
         }
         if (confirm('Are you sure you want to delete this note?')) {
