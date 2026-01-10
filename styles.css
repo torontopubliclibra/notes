@@ -235,6 +235,7 @@ body::before {
 @media (max-width: 700px) {
   .tabbed-container {
     max-width: 100vw;
+    min-height: calc(100vh - 140px);
     width: 100%;
     margin: 0;
     border-radius: 0;
@@ -560,7 +561,28 @@ footer {
 }
 
 @media only screen and (max-width: 700px) {
+  .note-title-main {
+    min-width: 0;
+    width: 100vw;
+    font-size: 1.2rem;
+    text-align: center;
+    margin: 0 auto 10px auto;
+    padding: 12px 0 0 0;
+    height: auto;
+    letter-spacing: 0.01em;
+  }
+  .tabbed-container {
+    min-width: 0;
+    width: 100%;
+    max-width: 100vw;
+    border-radius: 0;
+  }
   footer {
-    align-items: flex-start;
+    align-items: center;
+    text-align: center;
+  }
+  footer p, footer a {
+    width: 100%;
+    text-align: center;
   }
 }
