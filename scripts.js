@@ -5,8 +5,12 @@ const tabsContainer = document.getElementById('tabs');
 const textarea = document.getElementById('tabTextarea');
 const noteCloseBtn = document.getElementById('noteCloseBtn');
 const noteSwatches = document.getElementById('noteSwatches');
-const DEFAULT_COLOR = 'blue';
 const COLOR_CLASSES = ['blue', 'purple', 'red', 'green', 'orange', 'yellow'];
+let DEFAULT_COLOR = null; // Will be set on first note load
+
+function getRandomColor() {
+    return COLOR_CLASSES[Math.floor(Math.random() * COLOR_CLASSES.length)];
+}
 
 function loadNotes() {
     let notes = localStorage.getItem('nt2_notes_v2');
@@ -22,11 +26,19 @@ function loadNotes() {
         try {
             oldNotes = oldNotes ? JSON.parse(oldNotes) : [""];
         } catch { oldNotes = [""] }
-        parsed = oldNotes.map(t => ({text: t, color: DEFAULT_COLOR}));
+        // Set DEFAULT_COLOR for first note
+        DEFAULT_COLOR = COLOR_CLASSES[Math.floor(Math.random() * COLOR_CLASSES.length)];
+        parsed = oldNotes.map((t, i) => ({text: t, color: i === 0 ? DEFAULT_COLOR : getRandomColor()}));
     }
-    if (!parsed.length) parsed = [{text: '', color: DEFAULT_COLOR}];
-    parsed.forEach(note => {
+    if (!parsed || !parsed.length) {
+        DEFAULT_COLOR = COLOR_CLASSES[Math.floor(Math.random() * COLOR_CLASSES.length)];
+        parsed = [{text: '', color: DEFAULT_COLOR}];
+    } else if (DEFAULT_COLOR === null) {
+        DEFAULT_COLOR = parsed[0].color || COLOR_CLASSES[0];
+    }
+    parsed.forEach((note, i) => {
         if (!('lastUpdated' in note)) note.lastUpdated = null;
+        if (!('color' in note) || !COLOR_CLASSES.includes(note.color)) note.color = i === 0 ? DEFAULT_COLOR : getRandomColor();
     });
     return {
         tabContents: Array.isArray(parsed) && parsed.length ? parsed : [{text: '', color: DEFAULT_COLOR}],
@@ -72,7 +84,6 @@ function renderTabs() {
     addTabBtn.id = 'addTab';
     addTabBtn.textContent = '+';
     tabsContainer.appendChild(addTabBtn);
-    // Always update tab-content background to match current note color
     setNoteColor(tabContents[currentTab].color || DEFAULT_COLOR, true);
     saveNotes();
     updateInfoBar();
@@ -83,7 +94,6 @@ function updateInfoBar() {
     const note = tabContents[currentTab];
     let chars = 0;
     if (note.text) {
-        // Remove all \r and \n from the count
         chars = note.text.replace(/[\r\n]/g, '').length;
     }
     charCountSpan.textContent = chars + (chars === 1 ? ' character' : ' characters');
@@ -124,11 +134,10 @@ if (tabsContainer) {
                 }
                 return isEmpty && isUntitled;
             }).length;
-            if (emptyUntitledCount >= 2) {
-                // Prevent adding more than two empty/untitled notes
+            if (emptyUntitledCount >= 3) {
                 return;
             }
-            tabContents.push({text: '', color: DEFAULT_COLOR, lastUpdated: null});
+            tabContents.push({text: '', color: getRandomColor(), lastUpdated: null});
             switchTab(tabContents.length - 1);
         }
     });
@@ -138,15 +147,12 @@ if (noteCloseBtn) {
     noteCloseBtn.addEventListener('click', function() {
         if (tabContents.length === 1) {
             if (confirm('Are you sure you want to delete this note?')) {
-                // If the only note is empty and not blue, reset color to blue too
                 textarea.value = "";
                 tabContents[0].text = "";
                 tabContents[0].lastUpdated = null;
-                if (tabContents[0].color !== DEFAULT_COLOR) {
-                    tabContents[0].color = DEFAULT_COLOR;
-                    setNoteColor(DEFAULT_COLOR);
-                }
-                // Force tab label to 'untitled' by re-rendering tabs
+                const newColor = getRandomColor();
+                tabContents[0].color = newColor;
+                setNoteColor(newColor);
                 renderTabs();
                 saveNotes();
             }
